@@ -28,7 +28,7 @@ func Test(t *testing.T) {
 	assert.NotNil(t, db)
 
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
-	dbmap.TraceOn("[gorp]", log.New(os.Stdout, "myapp:", log.Lmicroseconds))
+	dbmap.TraceOn("[gorp]", log.New(os.Stdout, "", log.Lmicroseconds))
 	dbmap.AddTable(Country{}).SetKeys(false, "Code")
 	dbmap.AddTable(City{}).SetKeys(false, "Code")
 	assert.Nil(t, dbmap.CreateTablesIfNotExists())
