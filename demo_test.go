@@ -51,6 +51,14 @@ func Test(t *testing.T) {
 	assert.Equal(t, "SP", countries[1].Code)
 	assert.Equal(t, "Spain", countries[1].Name)
 
+	countries = []Country{}
+	dbmap.Select(&countries, "select * from Country where Code in (?, ?) order by Code", "PT", "SP")
+	assert.Equal(t, 2, len(countries))
+	assert.Equal(t, "PT", countries[0].Code)
+	assert.Equal(t, "Portugal", countries[0].Name)
+	assert.Equal(t, "SP", countries[1].Code)
+	assert.Equal(t, "Spain", countries[1].Name)
+
 	tx, err = dbmap.Begin()
 	assert.Nil(t, err)
 	count, err := tx.Update(&City{Code: "LIS", Name: "Lisboa"})
