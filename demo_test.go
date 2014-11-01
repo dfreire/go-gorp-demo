@@ -91,3 +91,7 @@ func Test(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 1, count)
 }
+
+func questionMarnks(n int) string {
+	return ""
+}
