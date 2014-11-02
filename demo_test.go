@@ -2,8 +2,10 @@ package demo_test
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/coopernurse/gorp"
@@ -52,7 +54,9 @@ func Test(t *testing.T) {
 	assert.Equal(t, "Spain", countries[1].Name)
 
 	countries = []Country{}
-	dbmap.Select(&countries, "select * from Country where Code in (?, ?) order by Code", "PT", "SP")
+	countryPks := []string{"PT", "SP"}
+	//dbmap.Select(&countries, "select * from Country where Code in (?, ?) order by Code", "PT", "SP")
+	dbmap.Select(&countries, fmt.Sprintf("select * from Country where Code in (%s) order by Code", questionMarks(len(countryPks))), "PT", "SP")
 	assert.Equal(t, 2, len(countries))
 	assert.Equal(t, "PT", countries[0].Code)
 	assert.Equal(t, "Portugal", countries[0].Name)
@@ -92,6 +96,10 @@ func Test(t *testing.T) {
 	assert.Equal(t, 1, count)
 }
 
-func questionMarnks(n int) string {
-	return ""
+func questionMarks(n int) string {
+	q := []string{}
+	for i := 0; i < n; i++ {
+		q = append(q, "?")
+	}
+	return strings.Join(q, ",")
 }
