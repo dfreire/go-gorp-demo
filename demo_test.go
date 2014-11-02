@@ -54,9 +54,8 @@ func Test(t *testing.T) {
 	assert.Equal(t, "Spain", countries[1].Name)
 
 	countries = []Country{}
-	countryPks := []string{"PT", "SP"}
-	//dbmap.Select(&countries, "select * from Country where Code in (?, ?) order by Code", "PT", "SP")
-	dbmap.Select(&countries, fmt.Sprintf("select * from Country where Code in (%s) order by Code", questionMarks(len(countryPks))), "PT", "SP")
+	countryPks := []interface{}{"PT", "SP"}
+	dbmap.Select(&countries, fmt.Sprintf("select * from Country where Code in (%s) order by Code", questionMarks(len(countryPks))), countryPks...)
 	assert.Equal(t, 2, len(countries))
 	assert.Equal(t, "PT", countries[0].Code)
 	assert.Equal(t, "Portugal", countries[0].Name)
